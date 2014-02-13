@@ -20,7 +20,14 @@
         <service
             android:name="org.codeweaver.muzei.ponies.PonyArtService"
             android:enabled="true"
-            android:exported="true" >
+            android:exported="true"
+            android:label="@string/app_name"
+            android:description="@string/app_description"
+            android:icon="@drawable/ic_launcher">
+            <intent-filter>
+                <action android:name="com.google.android.apps.muzei.api.MuzeiArtSource" />
+            </intent-filter>
+            <meta-data android:name="color" android:value="#fa0" />
         </service>
     </application>
 
