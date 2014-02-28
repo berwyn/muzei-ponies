@@ -2,6 +2,7 @@ package org.codeweaver.muzei.ponies;
 
 import com.google.gson.annotations.SerializedName;
 
+import retrofit.RetrofitError;
 import retrofit.http.GET;
 import retrofit.http.Query;
 
@@ -11,7 +12,7 @@ import retrofit.http.Query;
 public interface DeviantArtService {
 
     @GET("/oembed")
-    Deviation getDeviation(@Query("url") String url);
+    Deviation getDeviation(@Query("url") String url) throws RetrofitError;
 
     public static class Deviation {
         public String title;
