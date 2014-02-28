@@ -1,27 +1,16 @@
 package org.codeweaver.muzei.ponies;
 
-import android.app.Service;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.IBinder;
-import android.util.Log;
 
 import com.google.android.apps.muzei.api.Artwork;
 import com.google.android.apps.muzei.api.RemoteMuzeiArtSource;
-import com.squareup.okhttp.OkHttpClient;
 
-import java.net.HttpURLConnection;
-import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import retrofit.ErrorHandler;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 
 public class PonyArtService extends RemoteMuzeiArtSource {
 
-    Config config;
     MyLittleWallpaperService mlw;
     DeviantArtService deviantart;
 
@@ -47,7 +36,7 @@ public class PonyArtService extends RemoteMuzeiArtSource {
     @Override
     protected void onTryUpdate(int i) throws RetryException {
         String currentToken = (getCurrentArtwork() != null) ? getCurrentArtwork().getToken() : null;
-        MyLittleWallpaperService.Wallpaper wall = null;
+        MyLittleWallpaperService.Wallpaper wall;
         try {
             wall = mlw.getRandom(null);
         } catch(RetrofitError e) {
@@ -58,8 +47,9 @@ public class PonyArtService extends RemoteMuzeiArtSource {
 
         Artwork art = null;
         for(MyLittleWallpaperService.WallpaperResult wallpaper : wall.result) {
+            if(currentToken.equals(wallpaper.imageID)) continue;
             if(wallpaper.url.contains("deviantart")) {
-                DeviantArtService.Deviation deviation = null;
+                DeviantArtService.Deviation deviation;
                 try {
                     deviation = deviantart.getDeviation(wallpaper.url);
                 } catch(RetrofitError e) {
@@ -69,20 +59,17 @@ public class PonyArtService extends RemoteMuzeiArtSource {
                         .title(deviation.title)
                         .byline(deviation.author)
                         .imageUri(Uri.parse(deviation.url))
-                        .token(wall.result[0].imageID)
+                        .token(wallpaper.imageID)
                         .viewIntent(new Intent(Intent.ACTION_VIEW,
-                                Uri.parse(wall.result[0].url)))
+                                Uri.parse(wallpaper.url)))
                         .build();
                 break;
             }
         }
 
         if(art == null) throw new RetryException();
+        int delayInMillis = 60 * 1000; // One minute!
         publishArtwork(art);
-        scheduleUpdate(System.currentTimeMillis() + (10*1000));
-    }
-
-    enum Source {
-        DEVIANTART;
+        scheduleUpdate(System.currentTimeMillis() + delayInMillis);
     }
 }

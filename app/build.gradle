@@ -16,6 +16,7 @@ dependencies {
     compile 'com.google.android.apps.muzei:muzei-api:+'
     compile 'com.squareup.okhttp:okhttp:1.3.+'
     compile 'com.squareup.retrofit:retrofit:1.4.+'
+    compile 'com.android.support:support-v4:18.0.0'
 }
 
 android {
@@ -23,7 +24,7 @@ android {
     buildToolsVersion "19.0.0"
 
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 17
         targetSdkVersion 19
     }
 

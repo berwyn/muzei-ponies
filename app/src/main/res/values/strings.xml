@@ -1,4 +1,19 @@
 <resources>
     <string name="app_name">Muzei Ponies</string>
     <string name="app_description">A curated collection of My Little Pony wallpapers</string>
+    <string name="title_activity_settings">Settings</string>
+    <string-array name="pref_delay_display">
+        <item>1 minute</item>
+        <item>5 minutes</item>
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+    </string-array>
+    <string-array name="pref_delay_values">
+        <item>60000</item>
+        <item>300000</item>
+        <item>900000</item>
+        <item>1600000</item>
+        <item>3200000</item>
+    </string-array>
 </resources>

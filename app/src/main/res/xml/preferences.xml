@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:key="pref_key_tags"
+        android:summary="Tags to use when looking for wallpapers"
+        android:title="Search Tags"
+        android:defaultValue="" />
+    <ListPreference
+        android:entries="@array/pref_delay_display"
+        android:entryValues="@array/pref_delay_values"
+        android:key="pref_key_delay"
+        android:summary="The amount of time before changing wallpapers"
+        android:title="Delay"/>
+</PreferenceScreen>
