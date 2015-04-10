@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Muzei Ponies</string>
-    <string name="app_description">A curated collection of My Little Pony wallpapers</string>
-    <string name="title_activity_settings">Settings</string>
+    <string name="app_description">MLP Wallpapers, powered by Derpibooru</string>
+    <string name="title_activity_settings">Muzei Ponies Settings</string>
     <string-array name="pref_delay_display">
         <item>1 minute</item>
         <item>5 minutes</item>
@@ -16,4 +16,6 @@
         <item>1600000</item>
         <item>3200000</item>
     </string-array>
+    <string name="default_delay">60000</string>
+    <string name="uploaderName">Uploaded by %1s</string>
 </resources>

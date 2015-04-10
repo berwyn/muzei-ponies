@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.codeweaver.muzei.ponies"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    package="so.codeweaver.muzei.ponies">
+
+    <uses-feature android:name="android.software.live_wallpaper" android:required="true" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <uses-sdk
-        android:minSdkVersion="17"
-        android:targetSdkVersion="19" />
-
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Thememuzeiponies" >
+        android:theme="@style/Theme.Ponies" >
         <service
-            android:name="org.codeweaver.muzei.ponies.PonyArtService"
+            android:name=".PonyArtService"
             android:description="@string/app_description"
             android:enabled="true"
             android:exported="true"
@@ -30,14 +26,14 @@
 
             <meta-data
                 android:name="color"
-                android:value="#EE3D97" />
+                android:value="@color/colorPrimary" />
             <meta-data
                 android:name="settingsActivity"
-                android:value="org.codeweaver.muzei.ponies.SettingsActivity" />
+                android:value="so.codeweaver.muzei.ponies.SettingsActivity" />
         </service>
 
         <activity
-            android:name="org.codeweaver.muzei.ponies.SettingsActivity"
+            android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
             android:exported="true"
             android:icon="@drawable/ic_muzei"/>

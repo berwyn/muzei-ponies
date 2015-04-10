@@ -3,10 +3,10 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.8.+'
+        classpath 'com.android.tools.build:gradle:1.1.0'
     }
 }
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 repositories {
     mavenCentral()
@@ -14,33 +14,65 @@ repositories {
 
 dependencies {
     compile 'com.google.android.apps.muzei:muzei-api:+'
-    compile 'com.squareup.okhttp:okhttp:1.3.+'
-    compile 'com.squareup.retrofit:retrofit:1.4.+'
-    compile 'com.android.support:support-v4:18.0.0'
+
+    compile 'com.squareup.okhttp:okhttp:2.1.0'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.1.0'
+    compile 'com.squareup.retrofit:retrofit:1.8.0'
+
+    compile 'com.android.support:support-v4:22.0.0'
+    compile 'com.android.support:appcompat-v7:22.0.0'
 }
 
+// Manifest version information!
+def versionMajor = 1
+def versionMinor = 0
+def versionPatch = 0
+def versionBuild = 0 // bump for dogfood builds, public betas, etc.
+
+def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
+def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone("UTC"))
+
+def isTravis = "true".equals(System.getenv("TRAVIS"))
+def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
+
+def packageName = 'so.codeweaver.muzei.ponies'
+
 android {
-    compileSdkVersion 19
-    buildToolsVersion "19.0.0"
+    compileSdkVersion 22
+    buildToolsVersion "21.1.2"
 
     defaultConfig {
+        applicationId packageName
         minSdkVersion 17
-        targetSdkVersion 19
+        targetSdkVersion 22
+
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+
+        buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
+        buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
+        buildConfigField "String", "PACKAGE_NAME", "\"${packageName}\""
     }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
+
     buildTypes {
         release {
-            runProguard false
-            proguardFile getDefaultProguardFile('proguard-android.txt')
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            applicationIdSuffix '.dev'
+            versionNameSuffix '-dev'
         }
     }
-    productFlavors {
-        defaultFlavor {
-            proguardFile 'proguard-rules.txt'
-        }
+
+    dexOptions {
+        // Skip pre-dexing when running on Travis CI or when disabled via -Dpre-dex=false.
+        preDexLibraries = preDexEnabled && !isTravis
     }
 }

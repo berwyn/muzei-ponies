@@ -2,14 +2,14 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <EditTextPreference
-        android:key="pref_key_tags"
+        android:key="derpibooru.tagString"
         android:summary="Tags to use when looking for wallpapers"
         android:title="Search Tags"
-        android:defaultValue="" />
+        android:defaultValue="safe, wallpaper, score.gte:300" />
     <ListPreference
         android:entries="@array/pref_delay_display"
         android:entryValues="@array/pref_delay_values"
-        android:key="pref_key_delay"
+        android:key="derpibooru.delay"
         android:summary="The amount of time before changing wallpapers"
         android:title="Delay"/>
 </PreferenceScreen>
