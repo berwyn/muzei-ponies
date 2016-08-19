@@ -9,15 +9,19 @@ public class StringUtils {
         if(tags.length == 0) {
             return "";
         } else if(tags.length == 1) {
-            return tags[0];
+            return adjustTag(tags[0]);
         } else {
             StringBuilder sb = new StringBuilder();
             for(String tag : tags) {
-                sb.append(tag);
+                sb.append(adjustTag(tag));
                 sb.append(",");
             }
             return sb.substring(0, sb.lastIndexOf(","));
         }
+    }
+
+    private static String adjustTag(String tag) {
+        return tag.replace(" ", "+");
     }
 
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.Ponies" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="Theme.Ponies" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -8,5 +8,6 @@
         <!-- Remove the system action bar here -->
         <item name="android:windowActionBar">false</item>
         <item name="windowActionBar">false</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
 </resources>

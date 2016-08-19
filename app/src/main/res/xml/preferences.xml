@@ -5,11 +5,14 @@
         android:key="derpibooru.tagString"
         android:summary="Tags to use when looking for wallpapers"
         android:title="Search Tags"
-        android:defaultValue="safe, wallpaper, score.gte:300" />
+        android:defaultValue="safe, wallpaper, score.gte:300"
+        />
     <ListPreference
         android:entries="@array/pref_delay_display"
         android:entryValues="@array/pref_delay_values"
+        android:defaultValue="@string/default_delay"
         android:key="derpibooru.delay"
         android:summary="The amount of time before changing wallpapers"
-        android:title="Delay"/>
+        android:title="Delay"
+        />
 </PreferenceScreen>

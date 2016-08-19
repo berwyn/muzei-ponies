@@ -8,6 +8,9 @@
         <item>15 minutes</item>
         <item>30 minutes</item>
         <item>1 hour</item>
+        <item>6 hours</item>
+        <item>12 hours</item>
+        <item>24 hours</item>
     </string-array>
     <string-array name="pref_delay_values">
         <item>60000</item>
@@ -15,7 +18,10 @@
         <item>900000</item>
         <item>1600000</item>
         <item>3200000</item>
+        <item>21600000</item>
+        <item>43200000</item>
+        <item>86400000</item>
     </string-array>
-    <string name="default_delay">60000</string>
+    <string name="default_delay">86400000</string>
     <string name="uploaderName">Uploaded by %1s</string>
 </resources>

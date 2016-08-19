@@ -3,6 +3,7 @@ package so.codeweaver.muzei.ponies;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 /**
@@ -16,7 +17,7 @@ import android.support.v7.widget.Toolbar;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class SettingsActivity extends ActionBarActivity {
+public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,5 +25,10 @@ public class SettingsActivity extends ActionBarActivity {
 
         Toolbar tb = ((Toolbar) findViewById(R.id.toolbar));
         setSupportActionBar(tb);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content, new SettingsFragment())
+                .commit();
     }
 }
