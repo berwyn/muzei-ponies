@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.google.android.apps.muzei.api.Artwork;
 import com.google.android.apps.muzei.api.RemoteMuzeiArtSource;
@@ -13,12 +12,11 @@ import java.io.IOException;
 import java.util.Random;
 
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.moshi.MoshiConverterFactory;
+import timber.log.Timber;
 
 public class PonyArtService extends RemoteMuzeiArtSource {
 
@@ -30,14 +28,14 @@ public class PonyArtService extends RemoteMuzeiArtSource {
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(chain -> {
-                    Log.d(this.getClass().getSimpleName(), chain.request().header("User-Agent"));
-                    Log.d(this.getClass().getSimpleName(), chain.request().url().toString());
+                    Timber.d(this.getClass().getSimpleName(), chain.request().header("User-Agent"));
+                    Timber.d(this.getClass().getSimpleName(), chain.request().url().toString());
                     return chain.proceed(chain.request());
                 })
                 .build();
 
         service = new Retrofit.Builder()
-                .baseUrl("http://derpibooru.org")
+                .baseUrl("https://derpibooru.org")
                 .client(client)
                 .addConverterFactory(MoshiConverterFactory.create())
                 .build()
@@ -54,6 +52,22 @@ public class PonyArtService extends RemoteMuzeiArtSource {
 
     @Override
     protected void onTryUpdate(int i) throws RetryException {
+        switch(i) {
+            case UPDATE_REASON_INITIAL:
+                Timber.d("Waking for initial wallpaper");
+                break;
+            case UPDATE_REASON_USER_NEXT:
+                Timber.d("Waking because user has requested a new wallpaper");
+                break;
+            case UPDATE_REASON_SCHEDULED:
+                Timber.d("Waking for scheduled update");
+                break;
+            default:
+            case UPDATE_REASON_OTHER:
+                Timber.d("Waking for unknown reason");
+                break;
+        }
+
         String currentToken = (getCurrentArtwork() != null) ? getCurrentArtwork().getToken() : "";
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -65,11 +79,15 @@ public class PonyArtService extends RemoteMuzeiArtSource {
         try {
             resp = call.execute();
         } catch (IOException e) {
+            Timber.e(e);
             throw new RetryException();
         }
 
         DerpibooruResult res = resp.body();
-        if(res.total < 1) throw new RetryException();
+        if(res.total < 1) {
+            Timber.w("Query of %1s came back with no results", tagString);
+            throw new RetryException();
+        }
 
         Artwork art = null;
         do {
@@ -85,9 +103,9 @@ public class PonyArtService extends RemoteMuzeiArtSource {
                     .build();
         } while(art == null);
 
-        String delayString = prefs.getString(DerpibooruService.PREF_DELAY, "86400000"); // Defaults to one day
-        int delayInMillis = Integer.parseInt(delayString, 10);
         publishArtwork(art);
-        scheduleUpdate(System.currentTimeMillis() + delayInMillis);
+        String delayString = prefs.getString(DerpibooruService.PREF_DELAY, "86400000"); // Defaults to one day
+        scheduleUpdate(System.currentTimeMillis() + Long.parseLong(delayString, 10));
+
     }
 }
