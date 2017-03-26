@@ -15,4 +15,10 @@
         android:summary="The amount of time before changing wallpapers"
         android:title="Delay"
         />
+    <EditTextPreference
+        android:key="derpibooru.userKey"
+        android:summary="Your user key, so we can use your filters and watchlist"
+        android:title="User Key"
+        android:defaultValue=""
+        />
 </PreferenceScreen>

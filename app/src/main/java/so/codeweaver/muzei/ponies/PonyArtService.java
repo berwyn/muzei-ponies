@@ -26,13 +26,7 @@ public class PonyArtService extends RemoteMuzeiArtSource {
     public PonyArtService() {
         super("PonyArtService");
 
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(chain -> {
-                    Timber.d(this.getClass().getSimpleName(), chain.request().header("User-Agent"));
-                    Timber.d(this.getClass().getSimpleName(), chain.request().url().toString());
-                    return chain.proceed(chain.request());
-                })
-                .build();
+        OkHttpClient client = new OkHttpClient.Builder().build();
 
         service = new Retrofit.Builder()
                 .baseUrl("https://derpibooru.org")
@@ -72,8 +66,13 @@ public class PonyArtService extends RemoteMuzeiArtSource {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String tagString = prefs.getString(DerpibooruService.PREF_TAGS, "safe,wallpaper,score.gte:300,width.gte:1920,height.gte:1080");
+        String keyString = prefs.getString(DerpibooruService.PREF_KEY, null);
 
-        Call<DerpibooruResult> call = service.search(tagString, DerpibooruService.SEARCH_FILTER_RANDOM, DerpibooruService.SEARCH_ORDER_DESC);
+        Call<DerpibooruResult> call = service.search(
+            tagString,
+            DerpibooruService.SEARCH_FILTER_RANDOM,
+            DerpibooruService.SEARCH_ORDER_DESC,
+            keyString);
         Response<DerpibooruResult> resp;
 
         try {
@@ -87,6 +86,8 @@ public class PonyArtService extends RemoteMuzeiArtSource {
         if(res.total < 1) {
             Timber.w("Query of %1s came back with no results", tagString);
             throw new RetryException();
+        } else {
+            Timber.w("Query %s had %d results", tagString, res.search.length);
         }
 
         Artwork art = null;

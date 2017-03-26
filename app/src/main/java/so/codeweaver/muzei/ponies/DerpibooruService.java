@@ -12,6 +12,7 @@ public interface DerpibooruService {
 
     String PREF_TAGS  = "derpibooru.tagString";
     String PREF_DELAY = "derpibooru.delay";
+    String PREF_KEY = "derpibooru.userKey";
 
     String SEARCH_FILTER_RANDOM = "random";
     String SEARCH_ORDER_DESC    = "desc";
@@ -20,6 +21,7 @@ public interface DerpibooruService {
     @Headers({"User-Agent: muzei-ponies/" + BuildConfig.VERSION_NAME})
     Call<DerpibooruResult> search(@Query("q") String tagString,
                                   @Query("sf") String searchFilter,
-                                  @Query("sd") String searchOrder);
+                                  @Query("sd") String searchOrder,
+                                  @Query("key") String key);
 
 }
