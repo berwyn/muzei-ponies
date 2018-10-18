@@ -1,6 +1,6 @@
 ![](app/src/main/res/mipmap-hdpi/ic_launcher.png)
 <a href='https://play.google.com/store/apps/details?id=so.codeweaver.muzei.ponies&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'>
-<img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' style='max-height:72px'/>
+<img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height='72px'/>
 </a>
 
 # Muzei Ponies
