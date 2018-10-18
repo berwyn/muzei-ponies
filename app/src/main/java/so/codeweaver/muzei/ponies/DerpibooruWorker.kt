@@ -43,8 +43,8 @@ class DerpibooruWorker(context: Context, workerParameters: WorkerParameters) : W
 
     override fun doWork(): Result {
         val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-        val tagString: String = prefs.getString(DerpibooruService.PREF_TAGS, "safe,wallpaper,score.gte:300,width.gte:1920,height.gte:1080")
-        val keyString: String? = prefs.getString(DerpibooruService.PREF_KEY, null)
+        val tagString = prefs.getString(DerpibooruService.PREF_TAGS, "safe,wallpaper,score.gte:300,width.gte:1920,height.gte:1080")!!
+        val keyString = prefs.getString(DerpibooruService.PREF_KEY, null)
 
         val res = try {
             service.search(tagString, DerpibooruService.SEARCH_FILTER_RANDOM, DerpibooruService.SEARCH_ORDER_DESC, keyString).execute()
@@ -53,7 +53,8 @@ class DerpibooruWorker(context: Context, workerParameters: WorkerParameters) : W
             return Result.FAILURE
         }
 
-        val body: DerpibooruResult = res.body()
+        val body: DerpibooruResult = res.body()?: return Result.FAILURE
+
         if (body.total < 1) {
             Timber.w("Query of %1s came back with no results", tagString)
             return Result.FAILURE
