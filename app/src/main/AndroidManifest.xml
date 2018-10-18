@@ -31,7 +31,23 @@
             <meta-data
                 android:name="settingsActivity"
                 android:value="so.codeweaver.muzei.ponies.SettingsActivity" />
+            <meta-data
+                android:name="replacement"
+                android:value="so.codeweaver.muzei.ponies.PonyArtProvider" />
         </service>
+        
+        <provider
+            android:authorities="so.codeweaver.muzei.ponies"
+            android:name="so.codeweaver.muzei.ponies.PonyArtProvider"
+            android:label="@string/app_name"
+            android:description="@string/app_description"
+            android:exported="true"
+            android:permission="com.google.android.apps.muzei.api.ACCESS_PROVIDER">
+            <intent-filter>
+                <action android:name="com.google.android.apps.muzei.api.MuzeiArtProvider" />
+            </intent-filter>
+        </provider>
+
 
         <activity
             android:name=".SettingsActivity"

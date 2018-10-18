@@ -1,7 +1,6 @@
 package so.codeweaver.muzei.ponies;
 
 import android.app.Application;
-
 import timber.log.Timber;
 
 /**

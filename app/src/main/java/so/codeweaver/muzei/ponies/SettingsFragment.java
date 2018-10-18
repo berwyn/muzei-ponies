@@ -1,7 +1,7 @@
 package so.codeweaver.muzei.ponies;
 
 import android.os.Bundle;
-import android.support.v7.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceFragmentCompat;
 
 /**
  * Created by berwyn on 09/04/15.

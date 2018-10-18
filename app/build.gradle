@@ -1,32 +1,44 @@
 buildscript {
+    ext.kotlin_version = '1.2.71'
+
     repositories {
         mavenCentral()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.0'
-        classpath 'me.tatarka:gradle-retrolambda:3.2.5'
+        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
+
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'kotlin-android'
 
 repositories {
     jcenter()
     mavenCentral()
+    google()
 }
 
 dependencies {
-    compile 'com.google.android.apps.muzei:muzei-api:2.0'
+    implementation 'com.google.android.apps.muzei:muzei-api:3.0.0'
 
-    compile 'com.squareup.moshi:moshi:1.4.0'
-    compile 'com.squareup.okhttp3:okhttp:3.6.0'
-    compile 'com.squareup.retrofit2:retrofit:2.2.0'
-    compile 'com.squareup.retrofit2:converter-moshi:2.2.0'
-    compile 'com.jakewharton.timber:timber:4.3.0'
+    implementation 'com.squareup.moshi:moshi:1.4.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.2.0'
+    implementation 'com.squareup.retrofit2:converter-moshi:2.2.0'
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 
-    compile 'com.android.support:support-fragment:25.3.0'
-    compile 'com.android.support:appcompat-v7:25.3.0'
-    compile 'com.android.support:preference-v7:25.3.0'
+    def work_version = '1.0.0'
+    implementation "androidx.core:core:$work_version"
+    implementation "androidx.fragment:fragment:$work_version"
+    implementation "androidx.appcompat:appcompat:$work_version"
+    implementation "androidx.preference:preference:$work_version"
+
+    def work_version_ktx = '1.0.0-alpha10'
+    implementation "android.arch.work:work-runtime-ktx:$work_version_ktx"
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 // Manifest version information!
@@ -44,13 +56,13 @@ def preDexEnabled = "true" == System.getProperty("pre-dex", "true")
 def packageName = 'so.codeweaver.muzei.ponies'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         applicationId packageName
-        minSdkVersion 17
-        targetSdkVersion 25
+        minSdkVersion 19
+        targetSdkVersion 28
 
         versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
