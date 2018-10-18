@@ -46,6 +46,13 @@
             <intent-filter>
                 <action android:name="com.google.android.apps.muzei.api.MuzeiArtProvider" />
             </intent-filter>
+
+            <meta-data
+                android:name="color"
+                android:value="@color/colorPrimary" />
+            <meta-data
+                android:name="settingsActivity"
+                android:value="so.codeweaver.muzei.ponies.SettingsActivity" />
         </provider>
 
 
