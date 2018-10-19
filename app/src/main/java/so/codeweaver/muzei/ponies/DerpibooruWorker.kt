@@ -1,10 +1,8 @@
 package so.codeweaver.muzei.ponies
 
 import android.content.Context
-import android.net.Uri
 import android.preference.PreferenceManager
 import androidx.work.*
-import com.google.android.apps.muzei.api.provider.Artwork
 import com.google.android.apps.muzei.api.provider.ProviderContract
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -53,22 +51,14 @@ class DerpibooruWorker(context: Context, workerParameters: WorkerParameters) : W
             return Result.FAILURE
         }
 
-        val body: DerpibooruResult = res.body()?: return Result.FAILURE
+        val body: DerpibooruResult = res.body() ?: return Result.FAILURE
 
         if (body.total < 1) {
             Timber.w("Query of %1s came back with no results", tagString)
             return Result.FAILURE
         }
 
-        body.search.map { image ->
-            Artwork().apply {
-                token = image.id
-                title = "#${image.id}"
-                byline = "Uploaded by ${image.uploader}"
-                persistentUri = Uri.parse("https:${image.image}")
-                webUri = Uri.parse("https://derpibooru.org/${image.id}")
-            }
-        }.forEach { artwork ->
+        body.search.map { image -> image.buildArtwork() }.forEach { artwork ->
             ProviderContract.Artwork.addArtwork(
                     applicationContext,
                     PonyArtProvider::class.java,

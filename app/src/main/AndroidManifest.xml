@@ -55,7 +55,7 @@
                 android:value="@color/colorPrimary" />
             <meta-data
                 android:name="settingsActivity"
-                android:value="so.codeweaver.muzei.ponies.SettingsActivity" />
+                android:value="so.codeweaver.muzei.ponies.ConfigurationActivity" />
         </provider>
 
         <activity

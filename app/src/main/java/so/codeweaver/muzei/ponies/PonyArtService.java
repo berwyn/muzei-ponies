@@ -83,24 +83,24 @@ public class PonyArtService extends RemoteMuzeiArtSource {
         }
 
         DerpibooruResult res = resp.body();
-        if(res.total < 1) {
+        if(res.getTotal() < 1) {
             Timber.w("Query of %1s came back with no results", tagString);
             throw new RetryException();
         } else {
-            Timber.w("Query %s had %d results", tagString, res.search.length);
+            Timber.w("Query %s had %d results", tagString, res.getSearch().length);
         }
 
         Artwork art = null;
         do {
-            int idx = rand.nextInt(res.search.length);
-            DerpibooruResult.Image image = res.search[idx];
-            if(currentToken.equals(image.id)) continue;
+            int idx = rand.nextInt(res.getSearch().length);
+            DerpibooruImage image = res.getSearch()[idx];
+            if(currentToken.equals(image.getId())) continue;
             art = new Artwork.Builder()
-                    .title("#" + image.id)
-                    .byline(getString(R.string.uploaderName, image.uploader))
-                    .imageUri(Uri.parse("https:" + image.image))
-                    .token(image.id)
-                    .viewIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("https://derpibooru.org/" + image.id)))
+                    .title("#" + image.getId())
+                    .byline(getString(R.string.uploaderName, image.getUploader()))
+                    .imageUri(Uri.parse("https:" + image.getImage()))
+                    .token(image.getId())
+                    .viewIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("https://derpibooru.org/" + image.getId())))
                     .build();
         } while(art == null);
 

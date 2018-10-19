@@ -29,4 +29,6 @@
     <string name="label_settings">Settings</string>
     <string name="label_tags_input">Search Tags</string>
     <string name="label_api_key">API Key</string>
+
+    <string name="button_commit_changes">Save</string>
 </resources>

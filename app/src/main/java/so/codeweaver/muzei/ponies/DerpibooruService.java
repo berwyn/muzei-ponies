@@ -18,6 +18,8 @@ public interface DerpibooruService {
     String SEARCH_FILTER_RANDOM = "random";
     String SEARCH_ORDER_DESC    = "desc";
 
+    String DEFAULT_TAGS = "safe,wallpaper,score.gte:300,width.gte:1920,height.gte:1080";
+
     @GET("/search.json")
     @Headers({"User-Agent: muzei-ponies/" + BuildConfig.VERSION_NAME})
     Call<DerpibooruResult> search(

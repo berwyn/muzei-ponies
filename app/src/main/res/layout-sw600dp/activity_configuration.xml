@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.flexbox.FlexboxLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/view_flex_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:alignContent="stretch"
+    app:alignItems="flex_start"
+    app:flexDirection="row"
+    tools:context="so.codeweaver.muzei.ponies.ConfigurationActivity">
+
+    <ScrollView
+        android:layout_width="360dp"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/view_settings_pane_content" />
+
+    </ScrollView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/view_preview_list"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        tools:listItem="@layout/view_preview_list_item"
+        app:layout_flexGrow="1" />
+
+</com.google.android.flexbox.FlexboxLayout>
