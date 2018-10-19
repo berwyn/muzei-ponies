@@ -12,7 +12,9 @@ buildscript {
 }
 
 apply plugin: 'com.android.application'
+
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 repositories {
     jcenter()
@@ -21,19 +23,27 @@ repositories {
 }
 
 dependencies {
+    implementation 'com.google.android:flexbox:1.1.0'
     implementation 'com.google.android.apps.muzei:muzei-api:3.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
 
     implementation 'com.squareup.moshi:moshi:1.7.0'
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+    implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-moshi:2.4.0'
+
     implementation 'com.jakewharton.timber:timber:4.7.1'
+    implementation 'com.jakewharton:butterknife:9.0.0-rc1'
+
+    kapt 'com.jakewharton:butterknife-compiler:9.0.0-rc1'
 
     def work_version = '1.0.0'
     implementation "androidx.core:core:$work_version"
     implementation "androidx.fragment:fragment:$work_version"
     implementation "androidx.appcompat:appcompat:$work_version"
     implementation "androidx.preference:preference:$work_version"
+    implementation "androidx.recyclerview:recyclerview:$work_version"
 
     def work_version_ktx = '1.0.0-alpha10'
     implementation "android.arch.work:work-runtime-ktx:$work_version_ktx"

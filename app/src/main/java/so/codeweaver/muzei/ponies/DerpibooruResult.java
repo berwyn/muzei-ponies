@@ -13,6 +13,14 @@ public final class DerpibooruResult {
         public String image;
         public String uploader;
         public String tags;
+
+        public String getFullImageUri() {
+            return "https:" + this.image;
+        }
+
+        public String getWebUri() {
+            return "https://derpibooru.org/" + this.id;
+        }
     }
 
 }
