@@ -45,7 +45,7 @@ class DerpibooruWorker(context: Context, workerParameters: WorkerParameters) : W
         val keyString = prefs.getString(DerpibooruService.PREF_KEY, null)
 
         val res = try {
-            service.search(tagString, DerpibooruService.SEARCH_FILTER_RANDOM, DerpibooruService.SEARCH_ORDER_DESC, keyString).execute()
+            service.search(tagString, DerpibooruService.SORT_FORMAT_RANDOM, DerpibooruService.SORT_DIRECTION_DESC, keyString, 20).execute()
         } catch (e: IOException) {
             Timber.e(e)
             return Result.FAILURE

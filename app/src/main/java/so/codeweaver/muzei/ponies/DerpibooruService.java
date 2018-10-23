@@ -15,8 +15,15 @@ public interface DerpibooruService {
     String PREF_DELAY = "derpibooru.delay";
     String PREF_KEY = "derpibooru.userKey";
 
-    String SEARCH_FILTER_RANDOM = "random";
-    String SEARCH_ORDER_DESC    = "desc";
+    String SORT_FORMAT_RANDOM = "random";
+    String SORT_FORMAT_RELEVANCE = "relevance";
+    String SORT_FORMAT_SCORE = "score";
+    String SORT_FORMAT_COMMENTS = "comments";
+    String SORT_FORMAT_HEIGHT = "height";
+    String SORT_FORMAT_CREATED_AT = "created_at";
+
+    String SORT_DIRECTION_DESC = "desc";
+    String SORT_DIRECTION_ASC = "asc";
 
     String DEFAULT_TAGS = "safe,wallpaper,score.gte:300,width.gte:1920,height.gte:1080";
 
@@ -26,6 +33,7 @@ public interface DerpibooruService {
             @NonNull @Query("q") String tagString,
             @NonNull @Query("sf") String searchFilter,
             @NonNull @Query("sd") String searchOrder,
-            @Nullable @Query("key") String key
+            @Nullable @Query("key") String key,
+            @Nullable @Query("perpage") Integer count
     );
 }

@@ -46,7 +46,7 @@ public class PonyArtService extends RemoteMuzeiArtSource {
 
     @Override
     protected void onTryUpdate(int i) throws RetryException {
-        switch(i) {
+        switch (i) {
             case UPDATE_REASON_INITIAL:
                 Timber.d("Waking for initial wallpaper");
                 break;
@@ -69,10 +69,12 @@ public class PonyArtService extends RemoteMuzeiArtSource {
         String keyString = prefs.getString(DerpibooruService.PREF_KEY, null);
 
         Call<DerpibooruResult> call = service.search(
-            tagString,
-            DerpibooruService.SEARCH_FILTER_RANDOM,
-            DerpibooruService.SEARCH_ORDER_DESC,
-            keyString);
+                tagString,
+                DerpibooruService.SORT_FORMAT_RANDOM,
+                DerpibooruService.SORT_DIRECTION_DESC,
+                keyString,
+                20
+        );
         Response<DerpibooruResult> resp;
 
         try {
@@ -83,7 +85,7 @@ public class PonyArtService extends RemoteMuzeiArtSource {
         }
 
         DerpibooruResult res = resp.body();
-        if(res.getTotal() < 1) {
+        if (res.getTotal() < 1) {
             Timber.w("Query of %1s came back with no results", tagString);
             throw new RetryException();
         } else {
@@ -94,7 +96,7 @@ public class PonyArtService extends RemoteMuzeiArtSource {
         do {
             int idx = rand.nextInt(res.getSearch().length);
             DerpibooruImage image = res.getSearch()[idx];
-            if(currentToken.equals(image.getId())) continue;
+            if (currentToken.equals(image.getId())) continue;
             art = new Artwork.Builder()
                     .title("#" + image.getId())
                     .byline(getString(R.string.uploaderName, image.getUploader()))
@@ -102,7 +104,7 @@ public class PonyArtService extends RemoteMuzeiArtSource {
                     .token(image.getId())
                     .viewIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("https://derpibooru.org/" + image.getId())))
                     .build();
-        } while(art == null);
+        } while (art == null);
 
         publishArtwork(art);
         String delayString = prefs.getString(DerpibooruService.PREF_DELAY, "86400000"); // Defaults to one day

@@ -1,30 +1,25 @@
 package so.codeweaver.muzei.ponies
 
-import android.content.SharedPreferences
+import android.graphics.Rect
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.*
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.preference.PreferenceManager
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnTextChanged
-import com.google.android.apps.muzei.api.provider.Artwork
 import com.google.android.apps.muzei.api.provider.ProviderContract
-import com.google.android.flexbox.FlexDirection
-import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.textfield.TextInputEditText
 import com.squareup.picasso.Picasso
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
-import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import okhttp3.OkHttpClient
@@ -45,11 +40,12 @@ class ConfigurationActivity : AppCompatActivity() {
     @BindView(R.id.view_preview_list)
     lateinit var previewList: RecyclerView
 
-    @BindView(R.id.view_flex_root)
-    lateinit var flexRoot: FlexboxLayout
-
     @BindView(R.id.view_toolbar)
     lateinit var toolbar: Toolbar
+
+    private val isTablet by lazy {
+        resources.getBoolean(R.bool.is_tablet)
+    }
 
     private val adapter = PreviewListAdapter()
 
@@ -78,21 +74,29 @@ class ConfigurationActivity : AppCompatActivity() {
         tagSubject.onNext(tagString)
         tagsInput.setText(tagString)
 
-        val apiKey = prefs.getString(DerpibooruService.PREF_KEY, null)
+        val apiKey = prefs.getString(DerpibooruService.PREF_KEY, "")!!
         apiKeySubject.onNext(apiKey)
         keyInput.setText(apiKey)
 
-        val layoutManager = when (flexRoot.flexDirection) {
-            FlexDirection.COLUMN -> {
-                LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
-            }
-            else -> {
-                GridLayoutManager(this, previewList.width / 192)
-            }
-        }
+        val imageSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 192f, resources.displayMetrics)
 
-        previewList.layoutManager = layoutManager
+        previewList.hasFixedSize()
         previewList.adapter = adapter
+        previewList.viewTreeObserver.addOnPreDrawListener {
+            if (previewList.layoutManager != null) {
+                return@addOnPreDrawListener true
+            }
+
+            val layoutManager = if (!isTablet) {
+                LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+            } else {
+                val spanCount = Math.round(previewList.width / imageSize)
+                DenseGridLayoutManager(this, spanCount, imageSize.toInt())
+            }
+
+            previewList.layoutManager = layoutManager
+            true
+        }
 
         compositeDisposable = CompositeDisposable()
     }
@@ -205,7 +209,7 @@ class PreviewListAdapter : RecyclerView.Adapter<PreviewListViewHolder>() {
 
     fun queryImages(tags: String, apiKey: String?) {
         service
-                .search(tags, DerpibooruService.SEARCH_FILTER_RANDOM, DerpibooruService.SEARCH_ORDER_DESC, apiKey)
+                .search(tags, DerpibooruService.SORT_FORMAT_RELEVANCE, DerpibooruService.SORT_DIRECTION_DESC, apiKey, 20)
                 .enqueue(object : Callback<DerpibooruResult> {
                     override fun onFailure(call: Call<DerpibooruResult>, t: Throwable) {
                         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -223,3 +227,24 @@ class PreviewListAdapter : RecyclerView.Adapter<PreviewListViewHolder>() {
 }
 
 data class PreviewListViewHolder(val imageView: ImageView) : RecyclerView.ViewHolder(imageView)
+
+class DenseGridItemDecoration(private val spanCount: Int, private val imageSize: Float) : RecyclerView.ItemDecoration() {
+    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+        super.getItemOffsets(outRect, view, parent, state)
+
+        val position = parent.getChildLayoutPosition(view)
+        val offset = when (position % spanCount) {
+            0 -> { 0 }
+            1 -> {
+                val overflow = (imageSize * spanCount - parent.width)
+                Math.round(overflow / spanCount)
+            }
+            else -> {
+                val overflow = (imageSize  * spanCount - parent.width)
+                Math.round(overflow / (spanCount + 1))
+            }
+        }
+
+        outRect.set(offset, 0, 0, 0)
+    }
+}
