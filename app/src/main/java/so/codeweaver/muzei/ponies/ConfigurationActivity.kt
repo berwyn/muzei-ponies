@@ -28,6 +28,11 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import so.codeweaver.muzei.ponies.art.PonyArtProvider
+import so.codeweaver.muzei.ponies.derpi.DerpibooruImage
+import so.codeweaver.muzei.ponies.derpi.DerpibooruResult
+import so.codeweaver.muzei.ponies.derpi.DerpibooruService
+import so.codeweaver.muzei.ponies.util.DenseGridLayoutManager
 import java.util.concurrent.TimeUnit
 
 class ConfigurationActivity : AppCompatActivity() {

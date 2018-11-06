@@ -1,4 +1,4 @@
-package so.codeweaver.muzei.ponies;
+package so.codeweaver.muzei.ponies.art;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +16,10 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.moshi.MoshiConverterFactory;
+import so.codeweaver.muzei.ponies.R;
+import so.codeweaver.muzei.ponies.derpi.DerpibooruImage;
+import so.codeweaver.muzei.ponies.derpi.DerpibooruResult;
+import so.codeweaver.muzei.ponies.derpi.DerpibooruService;
 import timber.log.Timber;
 
 public class PonyArtService extends RemoteMuzeiArtSource {

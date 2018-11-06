@@ -1,4 +1,4 @@
-package so.codeweaver.muzei.ponies;
+package so.codeweaver.muzei.ponies.derpi;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -6,6 +6,8 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Query;
+import so.codeweaver.muzei.ponies.BuildConfig;
+import so.codeweaver.muzei.ponies.derpi.DerpibooruResult;
 
 /**
  * Created by berwyn on 09/04/15.

@@ -1,8 +1,10 @@
-package so.codeweaver.muzei.ponies
+package so.codeweaver.muzei.ponies.art
 
 import com.google.android.apps.muzei.api.UserCommand
 import com.google.android.apps.muzei.api.provider.Artwork
 import com.google.android.apps.muzei.api.provider.MuzeiArtProvider
+import so.codeweaver.muzei.ponies.R
+import so.codeweaver.muzei.ponies.derpi.DerpibooruWorker
 
 class PonyArtProvider : MuzeiArtProvider() {
     companion object {

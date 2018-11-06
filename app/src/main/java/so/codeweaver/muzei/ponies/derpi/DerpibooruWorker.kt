@@ -1,17 +1,26 @@
-package so.codeweaver.muzei.ponies
+package so.codeweaver.muzei.ponies.derpi
 
 import android.content.Context
-import android.preference.PreferenceManager
 import androidx.work.*
 import com.google.android.apps.muzei.api.provider.ProviderContract
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import so.codeweaver.muzei.ponies.art.PonyArtProvider
+import so.codeweaver.muzei.ponies.derpi.DerpibooruService.DEFAULT_TAGS
+import so.codeweaver.muzei.ponies.util.StringUtils
 import timber.log.Timber
 import java.io.IOException
 
 class DerpibooruWorker(context: Context, workerParameters: WorkerParameters) : Worker(context, workerParameters) {
     companion object {
+        const val KEY_TAGS = "DERPI_WORKER_TAGS"
+        const val KEY_API_KEY = "DERPI_WORKER_API_KEY"
+        const val KEY_COUNT = "DERPI_WORKER_COUNT"
+        const val KEY_PAGE = "DERPI_WORKER_PAGE"
+        const val KEY_ENQUEUE = "DERPI_WORKER_ENQUEUE"
+        const val KEY_RESULT = "DERPI_WORKER_RESULT"
+
         private const val TAG = "DerpibooruWorker"
 
         internal fun enqueueLoad() {
@@ -40,12 +49,12 @@ class DerpibooruWorker(context: Context, workerParameters: WorkerParameters) : W
     }
 
     override fun doWork(): Result {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-        val tagString = prefs.getString(DerpibooruService.PREF_TAGS, "safe,wallpaper,score.gte:300,width.gte:1920,height.gte:1080")!!
-        val keyString = prefs.getString(DerpibooruService.PREF_KEY, null)
+        val tagString = inputData.getString(KEY_TAGS) ?: DEFAULT_TAGS
+        val keyString = inputData.getString(KEY_API_KEY)
+        val count = inputData.getInt(KEY_COUNT, 20)
 
         val res = try {
-            service.search(tagString, DerpibooruService.SORT_FORMAT_RANDOM, DerpibooruService.SORT_DIRECTION_DESC, keyString, 20).execute()
+            service.search(StringUtils.buildDerpibooruTagString(tagString), DerpibooruService.SORT_FORMAT_RANDOM, DerpibooruService.SORT_DIRECTION_DESC, keyString, count).execute()
         } catch (e: IOException) {
             Timber.e(e)
             return Result.FAILURE
@@ -58,14 +67,19 @@ class DerpibooruWorker(context: Context, workerParameters: WorkerParameters) : W
             return Result.FAILURE
         }
 
-        body.search.map { image -> image.buildArtwork() }.forEach { artwork ->
-            ProviderContract.Artwork.addArtwork(
-                    applicationContext,
-                    PonyArtProvider::class.java,
-                    artwork
-            )
+        DerpibooruDatabase.get(applicationContext).imageDao.insertAll(*body.search)
+
+        val shouldEnqueue = inputData.getBoolean(KEY_ENQUEUE, true)
+        if (shouldEnqueue) {
+            body.search.map { image -> image.buildArtwork() }.forEach { artwork ->
+                ProviderContract.Artwork.addArtwork(
+                        applicationContext,
+                        PonyArtProvider::class.java,
+                        artwork
+                )
+            }
         }
 
-        return Result.SUCCESS;
+        return Result.SUCCESS
     }
 }

@@ -18,7 +18,7 @@
         android:theme="@style/Theme.Ponies">
 
         <service
-            android:name=".PonyArtService"
+            android:name=".art.PonyArtService"
             android:description="@string/app_description"
             android:enabled="true"
             android:exported="true"
@@ -40,7 +40,7 @@
         </service>
 
         <provider
-            android:name=".PonyArtProvider"
+            android:name=".art.PonyArtProvider"
             android:authorities="so.codeweaver.muzei.ponies"
             android:description="@string/app_description"
             android:exported="true"

@@ -1,4 +1,4 @@
-package so.codeweaver.muzei.ponies;
+package so.codeweaver.muzei.ponies.util;
 
 /**
  * Created by berwyn on 09/04/15.

@@ -1,4 +1,4 @@
-package so.codeweaver.muzei.ponies
+package so.codeweaver.muzei.ponies.util
 
 import android.content.Context
 import android.view.ViewGroup
