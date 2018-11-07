@@ -67,8 +67,6 @@ class DerpibooruWorker(context: Context, workerParameters: WorkerParameters) : W
             return Result.FAILURE
         }
 
-        DerpibooruDatabase.get(applicationContext).imageDao.insertAll(*body.search)
-
         val shouldEnqueue = inputData.getBoolean(KEY_ENQUEUE, true)
         if (shouldEnqueue) {
             body.search.map { image -> image.buildArtwork() }.forEach { artwork ->
