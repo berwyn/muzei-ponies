@@ -4,6 +4,7 @@
 .DS_Store
 .idea/
 *.iml
+app/release/
 
 # Built application files
 *.apk

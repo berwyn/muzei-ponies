@@ -1,9 +1,14 @@
+![](app/src/main/res/mipmap-hdpi/ic_launcher.png)
+<a href='https://play.google.com/store/apps/details?id=so.codeweaver.muzei.ponies&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'>
+<img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height='72px'/>
+</a>
+
 # Muzei Ponies
 
-A plugin to use Derpibooru in Romain Nurik's [muzei](http://muzei.co), with customisable filters and timeframes
+A plugin to use Derpibooru in Romain Nurik's [Muzei](http://muzei.co), with customisable filters
 
 ## Beta
-Muzei Ponies uses an [Open beta program][beta], feel free to join and try out the latest updates!
+Muzei Ponies uses an [open beta program][beta], feel free to join and try out the latest updates!
 
 ## Privacy Policy
 

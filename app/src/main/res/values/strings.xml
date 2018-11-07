@@ -24,4 +24,11 @@
     </string-array>
     <string name="default_delay">86400000</string>
     <string name="uploaderName">Uploaded by %1s</string>
+    <string name="pony_view_art_page">View this image on Derpibooru</string>
+
+    <string name="label_settings">Settings</string>
+    <string name="label_tags_input">Search Tags</string>
+    <string name="label_api_key">API Key</string>
+
+    <string name="button_commit_changes">Save</string>
 </resources>

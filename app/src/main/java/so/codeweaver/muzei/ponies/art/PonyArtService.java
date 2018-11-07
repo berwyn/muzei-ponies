@@ -1,4 +1,4 @@
-package so.codeweaver.muzei.ponies;
+package so.codeweaver.muzei.ponies.art;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +16,10 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.moshi.MoshiConverterFactory;
+import so.codeweaver.muzei.ponies.R;
+import so.codeweaver.muzei.ponies.derpi.DerpibooruImage;
+import so.codeweaver.muzei.ponies.derpi.DerpibooruResult;
+import so.codeweaver.muzei.ponies.derpi.DerpibooruService;
 import timber.log.Timber;
 
 public class PonyArtService extends RemoteMuzeiArtSource {
@@ -46,7 +50,7 @@ public class PonyArtService extends RemoteMuzeiArtSource {
 
     @Override
     protected void onTryUpdate(int i) throws RetryException {
-        switch(i) {
+        switch (i) {
             case UPDATE_REASON_INITIAL:
                 Timber.d("Waking for initial wallpaper");
                 break;
@@ -69,10 +73,12 @@ public class PonyArtService extends RemoteMuzeiArtSource {
         String keyString = prefs.getString(DerpibooruService.PREF_KEY, null);
 
         Call<DerpibooruResult> call = service.search(
-            tagString,
-            DerpibooruService.SEARCH_FILTER_RANDOM,
-            DerpibooruService.SEARCH_ORDER_DESC,
-            keyString);
+                tagString,
+                DerpibooruService.SORT_FORMAT_RANDOM,
+                DerpibooruService.SORT_DIRECTION_DESC,
+                keyString,
+                20
+        );
         Response<DerpibooruResult> resp;
 
         try {
@@ -83,26 +89,26 @@ public class PonyArtService extends RemoteMuzeiArtSource {
         }
 
         DerpibooruResult res = resp.body();
-        if(res.total < 1) {
+        if (res.getTotal() < 1) {
             Timber.w("Query of %1s came back with no results", tagString);
             throw new RetryException();
         } else {
-            Timber.w("Query %s had %d results", tagString, res.search.length);
+            Timber.w("Query %s had %d results", tagString, res.getSearch().length);
         }
 
         Artwork art = null;
         do {
-            int idx = rand.nextInt(res.search.length);
-            DerpibooruResult.Image image = res.search[idx];
-            if(currentToken.equals(image.id)) continue;
+            int idx = rand.nextInt(res.getSearch().length);
+            DerpibooruImage image = res.getSearch()[idx];
+            if (currentToken.equals(image.getId())) continue;
             art = new Artwork.Builder()
-                    .title("#" + image.id)
-                    .byline(getString(R.string.uploaderName, image.uploader))
-                    .imageUri(Uri.parse("https:" + image.image))
-                    .token(image.id)
-                    .viewIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("https://derpibooru.org/" + image.id)))
+                    .title("#" + image.getId())
+                    .byline(getString(R.string.uploaderName, image.getUploader()))
+                    .imageUri(Uri.parse("https:" + image.getImage()))
+                    .token(image.getId())
+                    .viewIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("https://derpibooru.org/" + image.getId())))
                     .build();
-        } while(art == null);
+        } while (art == null);
 
         publishArtwork(art);
         String delayString = prefs.getString(DerpibooruService.PREF_DELAY, "86400000"); // Defaults to one day
